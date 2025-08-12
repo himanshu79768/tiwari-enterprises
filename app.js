@@ -650,3 +650,60 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('🎨 Interactive portfolio gallery ready');
     console.log('📧 Contact form with validation enabled');
 });
+
+// Portfolio Filter Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if we're on the portfolio page
+    if (document.querySelector('.portfolio-filter')) {
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const portfolioItems = document.querySelectorAll('.portfolio-item');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all buttons
+                filterBtns.forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                const category = this.dataset.category;
+                
+                // Filter portfolio items
+                portfolioItems.forEach(item => {
+                    if (category === 'all' || item.dataset.category === category) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Initialize Isotope for filtering if you want more advanced filtering
+        // You'll need to include Isotope library for this to work
+        // initIsotope();
+    }
+});
+
+// Optional: Isotope initialization for more advanced filtering
+function initIsotope() {
+    const iso = new Isotope('.portfolio-grid', {
+        itemSelector: '.portfolio-item',
+        layoutMode: 'fitRows'
+    });
+
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            const filterValue = this.dataset.category;
+            if (filterValue === 'all') {
+                iso.arrange({ filter: '*' });
+            } else {
+                iso.arrange({ filter: `[data-category="${filterValue}"]` });
+            }
+        });
+    });
+}
+
